@@ -1,0 +1,38 @@
+{
+  "name": "pcweek.in",
+  "short_name": "PC Week",
+  "start_url": "https://www.pcweek.in/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#2A5365",
+  "description": "PC Week is a blog about Technology, Reviews, Tutorials, Fix, Android, Electronics, PC, Arduino, Blogging, Tech News and Tricks.",
+  "icons": [{
+    "src": "https://1.bp.blogspot.com/-GSJH34V3hGE/XP4x3JdF_GI/AAAAAAAAC1E/6P1FDZBqzvg1l-3tJcshHZpIGqR98-KswCLcBGAs/s1600/android-48x48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/-EON-_O6-IuA/XP4x3jBrHpI/AAAAAAAAC1M/9RN4C_L6RwUxak_wQ1tHnNu0Yr-EXYq0wCLcBGAs/s1600/android-72x72.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/-wb-B7u4sp_4/XP4x4ukW4QI/AAAAAAAAC1Q/c2CqBKpaQu8MMspfB7vslS7Hwj5kTwERACLcBGAs/s1600/android-96x96.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/--8K_ApuwDtE/XP4x2BrGcJI/AAAAAAAAC04/lA6-7-hkfuE3cUkL4LXX56_Ff01v3rBrwCLcBGAs/s1600/android-144x144.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/-XM_-v5TO-ZE/XP4x2C8cjBI/AAAAAAAAC08/i5c-Gq61ntwCzXuWat1rS5odgqswZHnQwCLcBGAs/s1600/android-168x168.png",
+    "sizes": "168x168",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/-TIm5dUjdY5M/XP4x2aB_8WI/AAAAAAAAC1A/jIDreLKSvSMUwgkIXGi3YV6ZxvMkEI4KQCLcBGAs/s1600/android-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }, {
+    "src": "https://1.bp.blogspot.com/-Z-mXs31jcPQ/XP4x3oRyU4I/AAAAAAAAC1I/ye0sTw1jGsIpoQ4tRZZx-rhOVrer2D-3ACLcBGAs/s1600/android-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
