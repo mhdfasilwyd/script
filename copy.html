@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width">
+  <style>
+  /* fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/* so button can go to edge */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+/* common styles for button */
+button#copy{
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1em;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background: #fff;
+  padding: 0 8px;
+  color: ##202125;
+  display: block;
+}
+/* cursor/size for within iframe */
+button#copy {
+  cursor: copy;
+  width: 100vw;
+  height: 100vh;
+}
+/* custom focus effect (outline would be cropped) */
+button#copy:active,
+button#copy:focus {
+  outline:0;
+  border-color:#0afaca;
+}
+  </style>
+</head>
+<body>
+<button id="copy">Copy</button>
+<input type="text" id="_i" hidden readonly />
+<script>
+copy.onclick = function() {
+  _i.value = window.decodeURIComponent(window.location.hash.substr(1));
+  _i.hidden = false;
+  _i.select();
+  _i.focus();
+  document.execCommand('copy');
+  _i.hidden = true;
+  _i.value = '';
+};
+</script>
+</body>
