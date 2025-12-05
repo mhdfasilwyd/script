@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dataset Collection Interface</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+	<style>
+		:root {
+			--primary-color: #4f46e5;
+			--danger-color: #ef4444;
+			--bg-color: #f8fafc;
+			--text-color: #1e293b;
+			--card-bg: #ffffff;
+			--success-color: #22c55e;
+			--bar-bg: #e2e8f0;
+		}
+
+		body {
+			font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+			background-color: var(--bg-color);
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.card {
+			background: var(--card-bg);
+			width: 100%;
+			max-width: 450px;
+			padding: 2rem;
+			border-radius: 1rem;
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+
+		.header { text-align: center; }
+		.header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-color); margin: 0; }
+		
+		.input-group {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+		
+		.input-label {
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: #475569;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.select-wrapper {
+			position: relative;
+		}
+
+		select {
+			width: 100%;
+			padding: 0.75rem 1rem;
+			font-size: 1rem;
+			border: 1px solid #cbd5e1;
+			border-radius: 0.5rem;
+			background-color: #f8fafc;
+			appearance: none;
+			cursor: pointer;
+			color: var(--text-color);
+		}
+		
+		select:focus {
+			outline: 2px solid var(--primary-color);
+			border-color: transparent;
+		}
+
+		.select-arrow {
+			position: absolute;
+			right: 1rem;
+			top: 50%;
+			transform: translateY(-50%);
+			pointer-events: none;
+			color: #64748b;
+		}
+
+		.progress-badges {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-top: 0.25rem;
+		}
+
+		.badge {
+			font-size: 0.75rem;
+			padding: 0.25rem 0.6rem;
+			border-radius: 9999px;
+			background: #f1f5f9;
+			color: #64748b;
+			border: 1px solid #e2e8f0;
+			transition: all 0.3s;
+			cursor: pointer;
+		}
+
+		.badge.done {
+			background: #dcfce7;
+			color: #166534;
+			border-color: #bbf7d0;
+		}
+		
+		.badge.active {
+			border-color: var(--primary-color);
+			color: var(--primary-color);
+			font-weight: 600;
+		}
+
+		.visualizer-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1.5rem;
+		}
+
+		.mic-wrapper {
+			width: 5rem;
+			height: 5rem;
+			background: #f1f5f9;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+		}
+
+		.mic-wrapper i {
+			font-size: 2rem;
+			color: #94a3b8;
+			transition: color 0.3s ease;
+		}
+
+		.mic-wrapper.active {
+			background: #fee2e2;
+		}
+
+		.mic-wrapper.active i {
+			color: var(--danger-color);
+		}
+
+		.level-bar-container {
+			width: 80%;
+			height: 12px;
+			background-color: var(--bar-bg);
+			border-radius: 999px;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.level-bar-fill {
+			height: 100%;
+			width: 0%;
+			background-color: var(--primary-color);
+			border-radius: 999px;
+			transition: width 0.05s linear;
+		}
+
+		.recording-active .level-bar-fill {
+			background: linear-gradient(90deg, #34d399 0%, #3b82f6 100%);
+		}
+
+		.btn {
+			border: none;
+			cursor: pointer;
+			font-weight: 600;
+			padding: 0.75rem 2rem;
+			border-radius: 9999px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			font-size: 1rem;
+			width: 100%;
+		}
+
+		.btn-record { background-color: var(--danger-color); color: white; width: auto; }
+		.btn-upload { background-color: var(--primary-color); color: white; }
+		.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+		.preview-section { display: none; flex-direction: column; gap: 1rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
+		.preview-section.show { display: flex; }
+		
+		audio { width: 100%; }
+		
+		.result-section {
+			background: #f0fdf4;
+			border: 1px solid #bbf7d0;
+			padding: 1rem;
+			border-radius: 0.5rem;
+			display: none;
+			color: #15803d;
+			font-size: 0.875rem;
+		}
+		.result-section.show { display: block; }
+
+		.status-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.25rem 0.75rem;
+			border-radius: 9999px;
+			font-size: 0.75rem;
+			background-color: #f1f5f9;
+			color: #64748b;
+			margin-top: 0.5rem;
+		}
+		
+		.progress-text {
+			font-size: 0.8rem;
+			color: var(--primary-color);
+			font-weight: 600;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="card">
+		<div class="header">
+			<h1>Voice Collection</h1>
+			<div id="statusBadge" class="status-badge">Connecting...</div>
+		</div>
+
+		<div class="input-group">
+			<div class="input-label">
+				<span>Select Wake Word</span>
+				<span id="progressText" class="progress-text">0/5 Completed</span>
+			</div>
+			
+			<div id="badgeContainer" class="progress-badges">
+			</div>
+
+			<div class="select-wrapper" style="margin-top: 0.5rem;">
+				<select id="wakeWordSelect">
+					<!-- Options injected by JS -->
+				</select>
+				<i class="fa-solid fa-chevron-down select-arrow"></i>
+			</div>
+		</div>
+
+		<div class="visualizer-container" id="visualizerContainer">
+			<div id="micWrapper" class="mic-wrapper">
+				<i class="fa-solid fa-microphone"></i>
+			</div>
+			
+			<div class="level-bar-container">
+				<div id="levelBar" class="level-bar-fill"></div>
+			</div>
+
+			<button id="recordBtn" class="btn btn-record">
+				<i class="fa-solid fa-circle"></i> <span>Start Recording</span>
+			</button>
+		</div>
+
+		<div id="previewSection" class="preview-section">
+			<audio id="audioPreview" controls></audio>
+			<button id="uploadBtn" class="btn btn-upload">
+				<i class="fa-solid fa-cloud-arrow-up"></i> Upload Data
+			</button>
+		</div>
+
+		<div id="resultSection" class="result-section"></div>
+	</div>
+
+	<script type="module">
+		import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js"
+		const GRADIO_URL = "https://0b7e673713198f22c4.gradio.live";
+		const WAKE_WORDS = [
+			{ id: "alexa", label: "Alexa" },
+			{ id: "hi_alexa", label: "Hi Alexa" },
+			{ id: "hey_alexa", label: "Hey Alexa" },
+			{ id: "google", label: "Google" },
+			{ id: "hi_google", label: "Hi Google" },
+			{ id: "hey_google", label: "Hey Google" },
+			{ id: "siri", label: "Siri" },
+			{ id: "hi_siri", label: "Hi Siri" },
+			{ id: "hey_siri", label: "Hey Siri" },
+		];
+
+		let appClient;
+		let mediaRecorder;
+		let audioChunks = [];
+		let audioBlob = null;
+		let isRecording = false;
+		let mimeType = 'audio/webm';
+		let completedWords = new Set();
+		let audioContext;
+		let analyser;
+		let dataArray;
+		let animationId;
+
+		const select = document.getElementById('wakeWordSelect');
+		const badgeContainer = document.getElementById('badgeContainer');
+		const micWrapper = document.getElementById('micWrapper');
+		const levelBar = document.getElementById('levelBar');
+		const visualizerContainer = document.getElementById('visualizerContainer');
+
+		function renderUI() {
+			badgeContainer.innerHTML = '';
+			WAKE_WORDS.forEach(word => {
+				const isDone = completedWords.has(word.id);
+				const badge = document.createElement('div');
+				badge.className = `badge ${isDone ? 'done' : ''}`;
+				badge.innerHTML = isDone ? `<i class="fa-solid fa-check"></i> ${word.label}` : word.label;
+				badge.onclick = () => {
+					select.value = word.id;
+					updateSelectVisuals();
+				};
+				badgeContainer.appendChild(badge);
+			});
+
+			const count = completedWords.size;
+			const total = WAKE_WORDS.length;
+			const textEl = document.getElementById('progressText');
+			
+			if(count === total) {
+				textEl.innerText = "🎉 All Done! Great job!";
+				textEl.style.color = "var(--success-color)";
+			} else {
+				textEl.innerText = `${total - count} more to go`;
+				textEl.style.color = "var(--primary-color)";
+			}
+		}
+
+		function initDropdown() {
+			select.innerHTML = '';
+			WAKE_WORDS.forEach(word => {
+				const opt = document.createElement('option');
+				opt.value = word.id;
+				opt.innerText = word.label;
+				select.appendChild(opt);
+			});
+			
+			select.addEventListener('change', updateSelectVisuals);
+		}
+
+		function updateSelectVisuals() {
+			const currentVal = select.value;
+			Array.from(badgeContainer.children).forEach((badge, idx) => {
+				if(WAKE_WORDS[idx].id === currentVal) badge.classList.add('active');
+				else badge.classList.remove('active');
+			});
+		}
+
+		initDropdown();
+		renderUI();
+		updateSelectVisuals();
+
+		async function init() {
+			try {
+				appClient = await Client.connect(GRADIO_URL);
+				document.getElementById('statusBadge').innerText = "System Ready";
+				document.getElementById('statusBadge').style.background = "#dcfce7";
+				document.getElementById('statusBadge').style.color = "#166534";
+			} catch (e) {
+				document.getElementById('statusBadge').innerText = "Connection Failed";
+				document.getElementById('statusBadge').style.background = "#fee2e2";
+				document.getElementById('statusBadge').style.color = "#991b1b";
+			}
+		}
+		init();
+
+		function startVisualizer(stream) {
+			audioContext = new (window.AudioContext || window.webkitAudioContext)();
+			const source = audioContext.createMediaStreamSource(stream);
+			analyser = audioContext.createAnalyser();
+			analyser.fftSize = 256;
+			
+			source.connect(analyser);
+			dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+			function draw() {
+				analyser.getByteFrequencyData(dataArray);
+				let sum = 0;
+				for(let i = 0; i < dataArray.length; i++) {
+					sum += dataArray[i];
+				}
+				let average = sum / dataArray.length;
+
+				const percentage = Math.min(100, (average / 100) * 100); 
+
+				levelBar.style.width = `${percentage}%`;
+
+				animationId = requestAnimationFrame(draw);
+			}
+			draw();
+		}
+
+		function stopVisualizer() {
+			if (animationId) cancelAnimationFrame(animationId);
+			if (audioContext) audioContext.close();
+			levelBar.style.width = '0%';
+		}
+
+		document.getElementById('recordBtn').onclick = async () => {
+			if (!isRecording) {
+				try {
+					const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+					
+					const types = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
+					mimeType = types.find(t => MediaRecorder.isTypeSupported(t)) || '';
+					
+					mediaRecorder = new MediaRecorder(stream, { mimeType });
+					audioChunks = [];
+					
+					mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+					mediaRecorder.onstop = () => {
+						audioBlob = new Blob(audioChunks, { type: mimeType });
+						document.getElementById('audioPreview').src = URL.createObjectURL(audioBlob);
+						document.getElementById('previewSection').classList.add('show');
+						
+						stream.getTracks().forEach(t => t.stop());
+						stopVisualizer();
+					};
+
+					mediaRecorder.start();
+					startVisualizer(stream);
+
+					isRecording = true;
+					document.getElementById('recordBtn').innerHTML = '<i class="fa-solid fa-stop"></i> Stop';
+					
+					micWrapper.classList.add('active');
+					visualizerContainer.classList.add('recording-active');
+					
+					document.getElementById('resultSection').classList.remove('show');
+				} catch (err) {
+					alert("Microphone Access Error: " + err.message);
+				}
+			} else {
+				mediaRecorder.stop();
+				isRecording = false;
+				document.getElementById('recordBtn').innerHTML = '<i class="fa-solid fa-circle"></i> Record Again';
+				
+				micWrapper.classList.remove('active');
+				visualizerContainer.classList.remove('recording-active');
+			}
+		};
+
+		document.getElementById('uploadBtn').onclick = async () => {
+			const btn = document.getElementById('uploadBtn');
+			const resultBox = document.getElementById('resultSection');
+			
+			btn.disabled = true;
+			btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+			
+			try {
+				const wakeWord = select.value;
+				
+				let ext = "webm";
+				if (mimeType.includes("mp4")) ext = "mp4";
+				else if (mimeType.includes("wav")) ext = "wav";
+
+				const file = new File([audioBlob], `audio.${ext}`, { type: mimeType });
+
+				const result = await appClient.predict("/predict", [file, wakeWord]);
+
+				resultBox.innerText = result.data[1]; 
+				resultBox.classList.add('show');
+				document.getElementById('previewSection').classList.remove('show');
+
+				completedWords.add(wakeWord);
+				renderUI();
+				
+				const nextWord = WAKE_WORDS.find(w => !completedWords.has(w.id));
+				if(nextWord) {
+					select.value = nextWord.id;
+					updateSelectVisuals();
+				}
+
+			} catch (err) {
+				alert("Error: " + err.message);
+			} finally {
+				btn.disabled = false;
+				btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload Data';
+			}
+		};
+	</script>
+</body>
+</html>
